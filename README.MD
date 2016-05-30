@@ -8,12 +8,14 @@
 
 <h1>How To Run It:</h1>
 <hr>
-	At the command line,input the command 'python .../entertainment_center.py'
-	,then will generate a new file named   fresh_tomatoes.html, and the page of html 
-	will run at you default browser.
+	First, you should be sure that you have installed the python environment.
+	******
+	$ cd website
+	$ python entertainment_center.py
+	
 
 Supported Python version
-====
+========================
 
 Python 2.7.*
 
