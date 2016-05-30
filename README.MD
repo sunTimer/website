@@ -1,7 +1,7 @@
 # Update Log
 ***
-- Add two new classes called Video and Music, Video is parent of class Movie and class Music.
-- 
+* Add two new classes called Video and Music, Video is parent of class Movie and class Music.
+* If you open the page, you will see the difference with the previous
 
 <h1>Project Title</h1>
 <hr>
@@ -14,10 +14,10 @@
 <h1>How To Run It</h1>
 <hr>
 	First, you should be sure that you have installed the python environment.
-	<hr>
+```	
 	$ cd website
 	$ python entertainment_center.py
-	
+```	
 
 Supported Python version
 ========================
