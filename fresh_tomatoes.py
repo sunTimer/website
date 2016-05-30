@@ -76,7 +76,7 @@ main_page_head = '''
         });
         // Animate in the movies when the page loads
         $(document).ready(function () {
-          $('.movie-tile').hide().first().show("fast", function showNext() {
+          $('.movie-tile').hide().show("fast", function showNext() {
             $(this).next("div").show("fast", showNext);
           });
         });
@@ -105,13 +105,29 @@ main_page_content = '''
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
           <div class="navbar-header">
-            <a class="navbar-brand" href="#">Fresh Tomatoes Movie Trailers</a>
+            <a class="navbar-brand" href="#">Entertainment Center !&nbsp;&nbsp; Now, have a relax !</a>
           </div>
         </div>
       </div>
     </div>
+    
     <div class="container">
+      <div class="page-header">
+        <h1>Movie</h1>
+      </div>
       {movie_tiles}
+      </div>
+    <div class="container">
+      <div class="page-header">
+        <h1>Music</h1>
+      </div>
+      {music_tiles}
+    </div>
+
+     <div class="container">
+      <div class="page-header">
+        <h1>Any things what you like...........</h1>
+      </div>
     </div>
   </body>
 </html>
@@ -120,12 +136,24 @@ main_page_content = '''
 
 # A single movie entry html template
 movie_tile_content = '''
-<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer">
-    <img src="{poster_image_url}" width="220" height="342">
-    <h2>{movie_title}</h2>
+<div class="col-md-6 col-lg-3 movie-tile text-center" data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer">
+    <img src="{poster_image_url}" width="220" height="142" class="thumbnail">
+    <h3>{movie_title}</h3>
+    <h4>{movie_views}&nbsp;views</h4>
+     <h4>directed by {movie_director}</h4>
 </div>
 '''
 
+
+# A single music entry html template
+music_tile_content = '''
+<div class="col-md-6 col-lg-3 movie-tile text-center" data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer">
+    <img src="{poster_image_url}" width="220" height="142" class="thumbnail">
+    <h3>{music_title}</h3>
+    <h4>{music_views}&nbsp;views</h4>
+    <h4>singer is {music_singer}</h4>
+</div>
+'''
 
 def create_movie_tiles_content(movies):
     # The HTML content for this section of the page
@@ -143,18 +171,45 @@ def create_movie_tiles_content(movies):
         content += movie_tile_content.format(
             movie_title=movie.title,
             poster_image_url=movie.poster_image_url,
-            trailer_youtube_id=trailer_youtube_id
+            trailer_youtube_id=trailer_youtube_id,
+            movie_views=movie.views,
+            movie_director = movie.movie_director
         )
     return content
 
 
-def open_movies_page(movies):
+
+def create_music_tiles_content(musics):
+    # The HTML content for this section of the page
+    content = ''
+    for music in musics:
+        # Extract the youtube ID from the url
+        youtube_id_match = re.search(
+            r'(?<=v=)[^&#]+', music.trailer_youtube_url)
+        youtube_id_match = youtube_id_match or re.search(
+            r'(?<=be/)[^&#]+', music.trailer_youtube_url)
+        trailer_youtube_id = (youtube_id_match.group(0) if youtube_id_match
+                              else None)
+
+        # Append the tile for the music with its content filled in
+        content += music_tile_content.format(
+            music_title=music.title,
+            poster_image_url=music.poster_image_url,
+            trailer_youtube_id=trailer_youtube_id,
+            music_views=music.views,
+            music_singer = music.singer
+        )
+    return content   
+
+
+def open_movies_page(movies, musics):
     # Create or overwrite the output file
     output_file = open('fresh_tomatoes.html', 'w')
 
     # Replace the movie tiles placeholder generated content
-    rendered_content = main_page_content.format(
-        movie_tiles=create_movie_tiles_content(movies))
+    movie_tiles_content = create_movie_tiles_content(movies)
+    music_tiles_content = create_music_tiles_content(musics)
+    rendered_content = main_page_content.format(movie_tiles=movie_tiles_content,music_tiles=music_tiles_content)
 
     # Output the file
     output_file.write(main_page_head + rendered_content)
