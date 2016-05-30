@@ -11,3 +11,9 @@
 	At the command line,input the command 'python .../entertainment_center.py'
 	,then will generate a new file named   fresh_tomatoes.html, and the page of html 
 	will run at you default browser.
+
+Supported Python version
+====
+
+Python 2.7.*
+
